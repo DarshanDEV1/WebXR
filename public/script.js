@@ -3,10 +3,12 @@ const socket = io();
 document.getElementById('createMeeting').addEventListener('click', createMeeting);
 document.getElementById('joinMeeting').addEventListener('click', showJoinMeeting);
 document.getElementById('joinButton').addEventListener('click', joinMeeting);
+document.getElementById('vrButton').addEventListener('click', toggleVRMode);
 
 let meetingCode;
 let peerConnection;
 let viewerId;
+let isVRMode = false;
 
 const config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
 
@@ -66,6 +68,9 @@ function setupPeerConnection(stream, isHost) {
     } else {
         peerConnection.ontrack = event => {
             document.getElementById('viewVideo').srcObject = event.streams[0];
+            // Set the same stream to VR video elements
+            document.getElementById('vrVideoLeft').srcObject = event.streams[0];
+            document.getElementById('vrVideoRight').srcObject = event.streams[0];
         };
 
         socket.on('offer', async (data) => {
@@ -97,6 +102,23 @@ function setupPeerConnection(stream, isHost) {
             }
         }
     });
+}
+
+function toggleVRMode() {
+    const viewMeetingSection = document.getElementById('viewMeetingSection');
+    const viewVideo = document.getElementById('viewVideo');
+    const vrContainer = document.getElementById('vrContainer');
+
+    isVRMode = !isVRMode;
+    if (isVRMode) {
+        viewVideo.classList.add('hidden');
+        vrContainer.classList.remove('hidden');
+        vrContainer.style.display = 'flex';
+    } else {
+        viewVideo.classList.remove('hidden');
+        vrContainer.classList.add('hidden');
+        vrContainer.style.display = 'none';
+    }
 }
 
 socket.on('invalidCode', () => {
