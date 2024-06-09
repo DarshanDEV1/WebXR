@@ -3,14 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VR Screen Share</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Screen Sharing App</title>
+    <link rel="stylesheet" href="public/styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to VR Screen Share</h1>
-        <p>Use your mobile device to view your PC screen in VR.</p>
-        <button onclick="location.href='login.html'">Login</button>
+    <div id="app">
+        <div id="menu">
+            <button id="createMeeting">Create Meeting</button>
+            <button id="joinMeeting">Join Meeting</button>
+        </div>
+        <div id="createMeetingSection" class="hidden">
+            <h2>Meeting Code: <span id="meetingCode"></span></h2>
+            <video id="screenVideo" autoplay></video>
+        </div>
+        <div id="joinMeetingSection" class="hidden">
+            <input type="text" id="joinCode" placeholder="Enter Meeting Code">
+            <button id="joinButton">Join</button>
+        </div>
+        <div id="viewMeetingSection" class="hidden">
+            <video id="viewVideo" autoplay></video>
+        </div>
     </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="public/script.js"></script>
 </body>
 </html>
