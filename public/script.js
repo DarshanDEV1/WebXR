@@ -61,7 +61,7 @@ function setupPeerConnection(stream, isHost) {
             viewerId = viewerSocketId;
             const offer = await peerConnection.createOffer();
             await peerConnection.setLocalDescription(offer);
-            socket.emit('offer', { offer, target: viewerId });
+            socket.emit('offer', { offer, target: viewerId, sender: socket.id });
         });
     } else {
         peerConnection.ontrack = event => {
@@ -73,7 +73,7 @@ function setupPeerConnection(stream, isHost) {
                 await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
                 const answer = await peerConnection.createAnswer();
                 await peerConnection.setLocalDescription(answer);
-                socket.emit('answer', { answer, target: data.offer.sender });
+                socket.emit('answer', { answer, target: data.sender });
             } catch (err) {
                 console.error('Error setting remote description and creating answer:', err);
             }
