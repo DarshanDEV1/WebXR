@@ -20,14 +20,14 @@ document.getElementById('startShare').addEventListener('click', async function()
 
 document.getElementById('increaseSize').addEventListener('click', function() {
     const videosphere = document.querySelector('a-videosphere');
-    const currentRadius = videosphere.getAttribute('radius');
-    videosphere.setAttribute('radius', currentRadius + 1);
+    const currentRadius = videosphere.getAttribute('radius') || 5;
+    videosphere.setAttribute('radius', parseFloat(currentRadius) + 1);
 });
 
 document.getElementById('decreaseSize').addEventListener('click', function() {
     const videosphere = document.querySelector('a-videosphere');
-    const currentRadius = videosphere.getAttribute('radius');
+    const currentRadius = videosphere.getAttribute('radius') || 5;
     if (currentRadius > 1) {
-        videosphere.setAttribute('radius', currentRadius - 1);
+        videosphere.setAttribute('radius', parseFloat(currentRadius) - 1);
     }
 });
