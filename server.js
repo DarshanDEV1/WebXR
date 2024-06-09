@@ -12,13 +12,12 @@ let meetingCodes = {};
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Serve index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log('a user connected', socket.id);
 
     socket.on('createMeeting', (code) => {
         meetingCodes[code] = socket.id;
@@ -39,19 +38,22 @@ io.on('connection', (socket) => {
     });
 
     socket.on('offer', (data) => {
+        console.log('Offer received:', data);
         io.to(data.target).emit('offer', data);
     });
 
     socket.on('answer', (data) => {
+        console.log('Answer received:', data);
         io.to(data.target).emit('answer', data);
     });
 
     socket.on('candidate', (data) => {
+        console.log('Candidate received:', data);
         io.to(data.target).emit('candidate', data);
     });
 
     socket.on('disconnect', () => {
-        console.log('user disconnected');
+        console.log('user disconnected', socket.id);
         for (const code in meetingCodes) {
             if (meetingCodes[code] === socket.id) {
                 delete meetingCodes[code];

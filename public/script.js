@@ -6,6 +6,8 @@ document.getElementById('joinButton').addEventListener('click', joinMeeting);
 
 let meetingCode;
 let peerConnection;
+let viewerId;
+
 const config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
 
 function createMeeting() {
@@ -50,12 +52,13 @@ function setupPeerConnection(stream, isHost) {
 
     peerConnection.onicecandidate = event => {
         if (event.candidate) {
-            socket.emit('candidate', { candidate: event.candidate, target: meetingCode });
+            socket.emit('candidate', { candidate: event.candidate, target: isHost ? viewerId : meetingCode });
         }
     };
 
     if (isHost) {
-        socket.on('viewerJoined', async (viewerId) => {
+        socket.on('viewerJoined', async (viewerSocketId) => {
+            viewerId = viewerSocketId;
             const offer = await peerConnection.createOffer();
             await peerConnection.setLocalDescription(offer);
             socket.emit('offer', { offer, target: viewerId });
@@ -65,29 +68,35 @@ function setupPeerConnection(stream, isHost) {
             document.getElementById('viewVideo').srcObject = event.streams[0];
         };
 
-        peerConnection.onaddstream = event => {
-            document.getElementById('viewVideo').srcObject = event.stream;
-        };
+        socket.on('offer', async (data) => {
+            try {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                socket.emit('answer', { answer, target: data.offer.sender });
+            } catch (err) {
+                console.error('Error setting remote description and creating answer:', err);
+            }
+        });
     }
 
     socket.on('answer', async (data) => {
-        await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+        try {
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+        } catch (err) {
+            console.error('Error setting remote description:', err);
+        }
     });
 
     socket.on('candidate', async (data) => {
         if (data.candidate) {
-            await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+            try {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+            } catch (err) {
+                console.error('Error adding ICE candidate:', err);
+            }
         }
     });
-
-    if (!isHost) {
-        socket.on('offer', async (data) => {
-            await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
-            const answer = await peerConnection.createAnswer();
-            await peerConnection.setLocalDescription(answer);
-            socket.emit('answer', { answer, target: data.offer.sender });
-        });
-    }
 }
 
 socket.on('invalidCode', () => {
