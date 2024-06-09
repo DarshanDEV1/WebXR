@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VR Screen Share - Share</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Screen Share in VR</h1>
+        <button id="startShare">Start Screen VR</button>
+        <div id="vr-container">
+            <a-scene>
+                <a-assets>
+                    <video id="sharedScreen" autoplay playsinline></video>
+                </a-assets>
+                <a-videosphere src="#sharedScreen" rotation="0 -90 0"></a-videosphere>
+            </a-scene>
+        </div>
+        <div id="controls">
+            <button id="increaseSize">Increase Size</button>
+            <button id="decreaseSize">Decrease Size</button>
+        </div>
+    </div>
+    <script src="share.js"></script>
+</body>
+</html>

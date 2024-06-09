@@ -3,72 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Three.js with Google Cardboard</title>
-    <style>
-        body { margin: 0; }
-        canvas { display: block; }
-    </style>
+    <title>VR Screen Share</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Include Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-    <!-- Include WebVR Polyfill -->
-    <script src="https://rawcdn.githack.com/googlevr/webvr-polyfill/0a4f6a7/webvr-polyfill.js"></script>
-
-    <!-- Include WebXR Polyfill -->
-    <script src="https://rawcdn.githack.com/immersive-web/webxr-polyfill/7a2251b/build/webxr-polyfill.min.js"></script>
-
-    <!-- Include Three.js VR Controls and Effect -->
-    <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/VRControls.js"></script>
-    <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/effects/VREffect.js"></script>
-    <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/vr/WebVR.js"></script>
-
-    <script>
-        // Create scene, camera, and renderer
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-
-        // Add a cube to the scene
-        const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
-
-        // Set camera position
-        camera.position.z = 5;
-
-        // Enable VR with VREffect and VRControls
-        const effect = new THREE.VREffect(renderer);
-        effect.setSize(window.innerWidth, window.innerHeight);
-
-        const controls = new THREE.VRControls(camera);
-        controls.standing = true;
-
-        // Add VR button to the page
-        document.body.appendChild(WEBVR.createButton(renderer));
-
-        // Animation loop
-        function animate() {
-            controls.update();
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
-            effect.render(scene, camera);
-            renderer.setAnimationLoop(animate);
-        }
-
-        animate();
-
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            effect.setSize(window.innerWidth, window.innerHeight);
-        });
-
-    </script>
+    <div class="container">
+        <h1>Welcome to VR Screen Share</h1>
+        <p>Use your mobile device to view your PC screen in VR.</p>
+        <button onclick="location.href='login.html'">Login</button>
+    </div>
 </body>
 </html>
