@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <h1>Screen Share in VR</h1>
-        <button id="startShare">Start Screen VR</button>
+        <button id="startShare" style="display:none;">Start Screen VR</button>
         <div id="vr-container">
             <a-scene>
                 <a-assets>
@@ -19,7 +19,7 @@
                 <a-videosphere src="#sharedScreen" rotation="0 -90 0"></a-videosphere>
             </a-scene>
         </div>
-        <div id="controls">
+        <div id="controls" style="display:none;">
             <button id="increaseSize">Increase Size</button>
             <button id="decreaseSize">Decrease Size</button>
         </div>

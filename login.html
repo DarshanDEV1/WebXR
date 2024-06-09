@@ -8,16 +8,24 @@
 </head>
 <body>
     <div class="container">
-        <h1>Login</h1>
-        <form id="loginForm">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <label for="secret">Secret Code:</label>
-            <input type="text" id="secret" name="secret" required>
-            <button type="submit">Login</button>
-        </form>
+        <h1>VR Screen Share</h1>
+        <button id="hostBtn">Host a Meeting</button>
+        <button id="joinBtn">Join a Meeting</button>
+
+        <div id="hostForm" style="display:none;">
+            <h2>Host a Meeting</h2>
+            <button id="generateCode">Generate Meeting Code</button>
+            <p id="meetingCode" style="display:none;"></p>
+        </div>
+
+        <div id="joinForm" style="display:none;">
+            <h2>Join a Meeting</h2>
+            <form id="joinMeetingForm">
+                <label for="meetingCodeInput">Meeting Code:</label>
+                <input type="text" id="meetingCodeInput" name="meetingCodeInput" required>
+                <button type="submit">Join</button>
+            </form>
+        </div>
     </div>
     <script src="login.js"></script>
 </body>
